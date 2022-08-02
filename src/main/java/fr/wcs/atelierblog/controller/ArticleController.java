@@ -2,11 +2,9 @@ package fr.wcs.atelierblog.controller;
 
 import fr.wcs.atelierblog.dto.ArticleDto;
 import fr.wcs.atelierblog.entity.Article;
-import fr.wcs.atelierblog.repository.ArticleRepository;
+import fr.wcs.atelierblog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -16,58 +14,30 @@ import java.util.List;
 public class ArticleController {
 
     @Autowired
-    ArticleRepository articleRepository;
+    ArticleService articleService;
 
     @GetMapping
     public List<Article> getAll(){
-        return articleRepository.findAll();
+        return articleService.findAll();
     }
 
     @GetMapping("/{id}")
     public Article getById(@PathVariable int id){
-        /*Optional<Article> optionalArticle = articleRepository.findById(id);
-
-        if(optionalArticle.isPresent()) return optionalArticle.get();
-        return null;*/
-
-        /*Optional<Article> optionalArticle = articleRepository.findById(id);
-
-        return optionalArticle.orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
-        );*/
-        // FindbyId renvoi un optional
-        // Sur l'optional, soit
-        return articleRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
-        );
+        return articleService.getById(id);
     }
-
 
     @PostMapping
     public Article create(@RequestBody @Valid ArticleDto articleDto) {
-        Article article = new Article();
-        article.setTitle(articleDto.getTitle());
-        article.setContent(articleDto.getContent());
-        return articleRepository.save(article);
+        return articleService.create(articleDto);
     }
 
     @PutMapping("/{id}")
     public Article update(@PathVariable Integer id, @RequestBody @Valid ArticleDto articleDto){
-        Article articleToUpdate =  articleRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
-        );
-
-        articleToUpdate.setTitle(articleDto.getTitle());
-        articleToUpdate.setContent(articleDto.getContent());
-        return articleRepository.save(articleToUpdate);
+        return articleService.update(id, articleDto);
     }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable int id){
-        try {
-            articleRepository.deleteById(id);
-        } catch (Exception exception ){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        articleService.deleteById(id);
     }
 }
