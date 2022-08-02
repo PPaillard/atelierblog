@@ -1,6 +1,11 @@
 package fr.wcs.atelierblog.dto;
 
-public class CreateCommentDto {
+import net.bytebuddy.implementation.bind.annotation.Empty;
+
+import javax.validation.constraints.NotEmpty;
+
+public class CommentDto {
+    @NotEmpty
     private String content;
 
     public String getContent() {

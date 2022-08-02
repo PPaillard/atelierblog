@@ -1,6 +1,6 @@
 package fr.wcs.atelierblog.controller;
 
-import fr.wcs.atelierblog.dto.CreateArticleDto;
+import fr.wcs.atelierblog.dto.ArticleDto;
 import fr.wcs.atelierblog.entity.Article;
 import fr.wcs.atelierblog.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,21 +44,21 @@ public class ArticleController {
 
 
     @PostMapping
-    public Article create(@RequestBody @Valid CreateArticleDto createArticleDto) {
+    public Article create(@RequestBody @Valid ArticleDto articleDto) {
         Article article = new Article();
-        article.setTitle(createArticleDto.getTitle());
-        article.setContent(createArticleDto.getContent());
+        article.setTitle(articleDto.getTitle());
+        article.setContent(articleDto.getContent());
         return articleRepository.save(article);
     }
 
     @PutMapping("/{id}")
-    public Article update(@PathVariable Integer id, @RequestBody Article article){
+    public Article update(@PathVariable Integer id, @RequestBody @Valid ArticleDto articleDto){
         Article articleToUpdate =  articleRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
         );
 
-        articleToUpdate.setTitle(article.getTitle());
-        articleToUpdate.setContent(article.getContent());
+        articleToUpdate.setTitle(articleDto.getTitle());
+        articleToUpdate.setContent(articleDto.getContent());
         return articleRepository.save(articleToUpdate);
     }
 

@@ -17,7 +17,15 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "article_id", nullable = false)
+    @JsonIgnore
     private Article article;
+
+    public Comment(String content, Article article) {
+        this.setContent(content);
+        this.setArticle(article);
+    }
+
+    public Comment() {}
 
     public Integer getId() {
         return id;

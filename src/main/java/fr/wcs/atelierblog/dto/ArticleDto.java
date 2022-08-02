@@ -1,14 +1,16 @@
 package fr.wcs.atelierblog.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
-import javax.validation.constraints.NotNull;
+public class ArticleDto {
 
-public class CreateArticleDto {
     // Permet de valider que le title n'est pas envoyé null
-    @NotNull(message = "Le titre est requis")
+    @NotEmpty(message = "Le titre est requis")
+    @Size(min=10, max = 150)
     private String title;
 
-    @NotNull(message = "Le contenu est requis")
+    @NotEmpty(message = "Le contenu est requis")
     private String content;
 
     public String getTitle() {
